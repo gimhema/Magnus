@@ -2,17 +2,36 @@
 
 // 강화학습 환경이다. gym의 env와 비슷한 역할을한다.
 
-// Magnus에서 제공하는 모든 강화학습 환경의 슈퍼클래스
+// 굳이 상속받아서 구현해야할까..? 
+
+namespace ENV_MODE
+{
+	enum KIND
+	{
+		DEFAULT,
+		TRAIN,
+		TEST
+	};
+}
+
+
 class MagnusRLEnv
 {
 public:
 	MagnusRLEnv();
 	~MagnusRLEnv();
 
-	void Init();
-	void Action();
-	void Update();
 
 public:
+	ENV_MODE::KIND envMode;
+
+public:
+	void Init();
+	void Loop();
+	void Action(); // Sampling Action Space
+	void NextStep();
+	void Update();
+
+
 
 };
