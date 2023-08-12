@@ -22,6 +22,11 @@ void MagnusConnector::CreateConnectorIOCP()
 	
 }
 
+void MagnusConnector::ConnectorReady()
+{
+
+}
+
 void MagnusConnector::ConnectorListen()
 {
 
@@ -36,5 +41,7 @@ void MagnusConnector::PublishData()
 {
 
 }
+
+
 
 
