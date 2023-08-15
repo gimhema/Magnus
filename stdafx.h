@@ -4,3 +4,6 @@
 #include <Windows.h>
 #include <WinSock2.h>
 #include <stdio.h>
+
+#define SERVERPORT 9000
+#define BUFSIZE 1024
