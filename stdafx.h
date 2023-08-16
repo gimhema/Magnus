@@ -18,6 +18,8 @@
 #include <stdio.h>
 #include <WS2tcpip.h>
 
+#include <iostream>
+
 #define SERVERPORT 9000
 #define BUFSIZE 1024
 

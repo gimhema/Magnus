@@ -14,6 +14,85 @@ MagnusConnector::~MagnusConnector()
 
 DWORD WINAPI WorkerThread(LPVOID arg)
 {
+	int retval;
+	HANDLE hcp = (HANDLE)arg;
+
+	while (1)
+	{
+		DWORD cbTransferred;
+		SOCKET client_sock;
+		SOCKETINFO* ptr;
+
+		retval = GetQueuedCompletionStatus(hcp, &cbTransferred,
+			(PULONG_PTR)&client_sock, (LPOVERLAPPED*)&ptr, INFINITE);
+
+		struct sockaddr_in clientaddr;
+		int addrlen = sizeof(clientaddr);
+		getpeername(ptr->socket, (struct sockaddr*)&clientaddr, &addrlen);
+		char addr[INET_ADDRSTRLEN];
+		inet_ntop(AF_INET, &clientaddr.sin_addr, addr, sizeof(addr));
+
+		if (retval == 0 || cbTransferred == 0)
+		{
+			std::cout << " Client Exit . . . IP : " << addr << " Port : " << ntohs(clientaddr.sin_port) << std::endl;
+			closesocket(ptr->socket);
+			delete ptr; continue;
+		}
+
+		if (ptr->recvbytes == 0) {
+			ptr->recvbytes = cbTransferred;
+			ptr->sendbytes = 0;
+
+			ptr->buf[ptr->recvbytes] = '\0';
+			std::cout << "[" << addr << ":" << ntohs(clientaddr.sin_port) << "] : " << ptr->buf << std::endl;
+		}
+		else
+		{
+			ptr->sendbytes += cbTransferred;
+		}
+
+		if (ptr->recvbytes > ptr->sendbytes)
+		{
+			memset(&ptr->overlapped, 0, sizeof(ptr->overlapped));
+			ptr->wsabuf.buf = ptr->buf + ptr->sendbytes;
+			ptr->wsabuf.len = ptr->recvbytes - ptr->sendbytes;
+
+			DWORD sendbytes;
+			retval = WSASend(ptr->socket, &ptr->wsabuf, 1,
+				&sendbytes, 0, &ptr->overlapped, NULL);
+			if (retval == SOCKET_ERROR)
+			{
+				if (WSAGetLastError() != WSA_IO_PENDING)
+				{
+					// WSA Send Error
+				}
+				continue;
+			}
+		}
+		else
+		{
+			ptr->recvbytes = 0;
+			memset(&ptr->overlapped, 0, sizeof(ptr->overlapped));
+			ptr->wsabuf.buf = ptr->buf;
+			ptr->wsabuf.len = BUFSIZE;
+
+			DWORD recvbytes;
+			DWORD flags = 0;
+
+			retval = WSARecv(ptr->socket, &ptr->wsabuf, 1,
+				&recvbytes, &flags, &ptr->overlapped, NULL);
+
+			if (retval == SOCKET_ERROR)
+			{
+				if (WSAGetLastError() != WSA_IO_PENDING)
+				{
+					// Error
+				}
+				continue;
+			}
+		}
+	}
+
 	return 0;
 }
 
