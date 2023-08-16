@@ -23,7 +23,7 @@ public:
 
 
 public:
-	ENV_MODE::KIND envMode;
+	ENV_MODE::KIND envMode = ENV_MODE::DEFAULT;
 
 public:
 	void Init();

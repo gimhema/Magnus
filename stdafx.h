@@ -1,6 +1,18 @@
 #pragma once
 
+#pragma comment(lib, "ws2_32.lib")
+
 #define WIN32_LEAN_AND_MEAN
+
+#define NOMINMAX
+#ifdef max
+#undef max
+#endif
+
+#ifdef min
+#undef min
+#endif
+
 #include <Windows.h>
 #include <WinSock2.h>
 #include <stdio.h>
@@ -8,6 +20,8 @@
 
 #define SERVERPORT 9000
 #define BUFSIZE 1024
+
+
 
 namespace NET_ERROR
 {

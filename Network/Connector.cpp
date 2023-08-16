@@ -12,6 +12,11 @@ MagnusConnector::~MagnusConnector()
 
 }
 
+DWORD WINAPI WorkerThread(LPVOID arg)
+{
+	return 0;
+}
+
 int MagnusConnector::ConnectorMain()
 {
 	int retval;
