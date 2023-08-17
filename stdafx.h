@@ -17,7 +17,8 @@
 #include <WinSock2.h>
 #include <stdio.h>
 #include <WS2tcpip.h>
-
+#include <vector>
+#include <string>
 #include <iostream>
 
 #define SERVERPORT 9000
