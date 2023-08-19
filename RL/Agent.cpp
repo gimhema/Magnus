@@ -18,10 +18,10 @@ void MagnusAgent::Init()
 }
 
 
-void MagnusAgent::SetEnvironment(MagnusRLEnv _environment)
-{
-	environment = _environment;
-}
+// void MagnusAgent::SetEnvironment(MagnusRLEnv _environment)
+// {
+// 	environment = _environment;
+// }
 
 
 

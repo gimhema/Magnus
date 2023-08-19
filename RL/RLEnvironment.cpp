@@ -1,5 +1,6 @@
 #include"RLEnvironment.h"
 
+using namespace BenchMarkExample;
 
 MagnusRLEnv::MagnusRLEnv()
 {
@@ -12,35 +13,41 @@ MagnusRLEnv::~MagnusRLEnv()
 
 }
 
-void MagnusRLEnv::Init()
+
+SimpleSlotMachine::SimpleSlotMachine()
 {
 
 }
 
-void MagnusRLEnv::Action()
+SimpleSlotMachine::~SimpleSlotMachine()
 {
 
 }
 
-void MagnusRLEnv::NextStep()
+void SimpleSlotMachine::Init()
 {
 
 }
 
-void MagnusRLEnv::Update()
+void SimpleSlotMachine::Loop()
 {
 
 }
 
-void MagnusRLEnv::Loop()
+void SimpleSlotMachine::Action()
 {
 
 }
 
+void SimpleSlotMachine::NextStep()
+{
 
+}
 
+void SimpleSlotMachine::Update()
+{
 
-
+}
 
 
 

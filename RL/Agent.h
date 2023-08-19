@@ -9,11 +9,11 @@ public:
 	~MagnusAgent();
 
 public:
-	MagnusRLEnv environment;
+//	MagnusRLEnv environment;
 
 
 public:
 	void Init();
-	void SetEnvironment(MagnusRLEnv _environment);
+//	void SetEnvironment(MagnusRLEnv _environment);
 
 };
