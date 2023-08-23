@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include<torch/torch.h>
+
 
 
 int main()

@@ -13,10 +13,16 @@
 #undef min
 #endif
 
+// Network
 #include <Windows.h>
 #include <WinSock2.h>
 #include <stdio.h>
 #include <WS2tcpip.h>
+
+// Std
+#include <random>
+#include <cmath>
+#include <algorithm>
 #include <vector>
 #include <string>
 #include <iostream>
@@ -24,6 +30,8 @@
 #define SERVERPORT 9000
 #define BUFSIZE 1024
 
+// Lib Torch
+#include<torch/torch.h>
 
 
 namespace NET_ERROR

@@ -1,5 +1,4 @@
 #pragma once
-#include "NNet.h"
 #include "Utility.h"
 
 namespace RLAlgo
