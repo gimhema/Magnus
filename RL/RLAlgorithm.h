@@ -3,6 +3,7 @@
 #include "Utility.h"
 
 
+
 struct HyperParammter
 {
 	int NUM_ACTIONS;
@@ -36,9 +37,22 @@ namespace NNet
 		}
 
 		torch::nn::Linear fc1{ nullptr }, fc2{ nullptr }, out{ nullptr };
+
+        void clone_weights_from(const NNet::Net& other) {
+            torch::autograd::GradMode::set_enabled(false);
+            for (size_t i = 0; i < fc1->parameters().size(); ++i) {
+                fc1->parameters()[i].data().copy_(other.fc1->parameters()[i].data());
+            }
+            for (size_t i = 0; i < fc2->parameters().size(); ++i) {
+                fc2->parameters()[i].data().copy_(other.fc2->parameters()[i].data());
+            }
+            for (size_t i = 0; i < out->parameters().size(); ++i) {
+                out->parameters()[i].data().copy_(other.out->parameters()[i].data());
+            }
+            torch::autograd::GradMode::set_enabled(true);
+        }
 	};
 }
-
 
 namespace RLAlgo
 {
@@ -78,7 +92,7 @@ namespace RLAlgo
 
         void learn() {
             if (learn_step_counter % hParam.QNetIteration == 0) {
-//                target_net.load_state_dict(eval_net.state_dict());
+                target_net.clone_weights_from(eval_net);
             }
             learn_step_counter += 1;
 
