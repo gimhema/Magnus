@@ -48,15 +48,12 @@ namespace RLAlgo
         HyperParammter hParam;
 
     public:
-        DQN()
-            : eval_net(NNet::Net()), target_net(NNet::Net()) 
+        
+        DQN() : eval_net(NNet::Net()), target_net(NNet::Net()), optimizer(eval_net.parameters(), torch::optim::AdamOptions(hParam.LR))
         {
             learn_step_counter = 0;
             memory_counter = 0;
             memory = torch::zeros({ hParam.MemoryCapacity, hParam.NUM_STATES * 2 + 2 });
-
-            torch::optim::AdamOptions adam_options(hParam.LR);  // Create Adam options with the given learning rate
-//            optimizer = torch::optim::Adam(eval_net.parameters(), adam_options);
 
             loss_func = torch::nn::MSELoss();
         }
