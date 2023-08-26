@@ -4,17 +4,6 @@
 
 
 
-struct HyperParammter
-{
-	int NUM_ACTIONS;
-	int NUM_STATES;
-    int BatchSize;
-    float LR;
-    float Gamma;
-    float Episilo;
-    int MemoryCapacity;
-    int QNetIteration;
-};
 
 
 namespace NNet
