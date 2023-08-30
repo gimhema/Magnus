@@ -13,7 +13,7 @@ Trainer::~Trainer()
 
 void Trainer::Initailize()
 {
-
+    // algoMap 초기화 작업 진행
 }
 
 

@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-
+#include "RL/RLAlgorithm.h"
 
 // TrainOrder로부터 지정받은 옵션을 기반으로 실질적인 훈련을 진행하는 클래스
 
@@ -42,6 +42,7 @@ public:
 
 public:
 	int episodes = 0;
+	std::unordered_map<RL_ALGO::_KIND, RLAlgo::RL_Base> algoMap;
 
 };
 

@@ -45,6 +45,16 @@ namespace NNet
 
 namespace RLAlgo
 {
+    class RL_Base {
+    // RL Algorithm들이 기본적으로 상속받아서 사용해야하는 클래스, 일단 DQN이 안정적으로 돌아가고나서부터 구현해보자..
+    public:
+        RL_Base();
+        ~RL_Base();
+    public:
+        virtual void ChooseAction();
+        virtual void Learn();
+    };
+
     class DQN {
 
     public:
