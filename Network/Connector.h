@@ -32,11 +32,6 @@ public:
 	int ConnectorMain();
 
 
-	void ConnectorSocketInitialize();
-	void CreateConnectorIOCP();
-	void ConnectorReady();
-	void ConnectorListen();
-	void ConnectorClose();
 	void PublishData();
 
 
