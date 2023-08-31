@@ -7,6 +7,16 @@
 // 게임에서 전송하는 메세지를 최초로 받아오는 클래스이다.
 
 
+// Unreal Env -> Magnus Server
+namespace ENV_MESSAGE
+{
+	enum _KIND
+	{
+		ENV_MESSAGE_SET_TRAIN_ORDER,
+		ENV_MESSAGE_START_TRAIN,
+		ENV_MESSAGE_CURRENT_STATE
+	};
+}
 
 // 통신용 소켓정보 구조체
 struct SOCKETINFO
@@ -28,9 +38,9 @@ public:
 
 public:
 
-	// 일단 여기서 로직 전부 쓰고.. 역할에따라 밑에 함수들로 나누고..
 	int ConnectorMain();
 
+	void ConnectorServerAction();
 
 	void PublishData();
 

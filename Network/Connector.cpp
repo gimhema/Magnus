@@ -51,6 +51,7 @@ DWORD WINAPI WorkerThread(LPVOID arg)
 			ptr->sendbytes += cbTransferred;
 		}
 
+		// ConnectorServerAction 걸어야 하는 위치
 		if (ptr->recvbytes > ptr->sendbytes)
 		{
 			memset(&ptr->overlapped, 0, sizeof(ptr->overlapped));
@@ -210,6 +211,10 @@ int MagnusConnector::ConnectorMain()
 	return 0;
 }
 
+void MagnusConnector::ConnectorServerAction()
+{
+
+}
 
 void MagnusConnector::PublishData()
 {

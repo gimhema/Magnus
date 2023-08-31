@@ -27,6 +27,7 @@
 #include <string>
 #include <iostream>
 #include <unordered_map>
+#include <functional>
 
 #define SERVERPORT 9000
 #define BUFSIZE 1024
