@@ -44,10 +44,11 @@ public:
 
 public:
 	char param[MESSAGE_SIZE];
-	// std function member . . . .
+	std::function<void(char*)> Function; // std function member . . . .
+	
 public:
 	void SetParam(char _param[MESSAGE_SIZE]);
-	void SetFunction(); // set function member . . . .
+	void SetFunction(std::function<void(char*)> _func); // set function member . . . .
 	void Execute();
 
 };

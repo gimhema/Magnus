@@ -8,9 +8,9 @@
 
 namespace NNet
 {
-    HyperParammter hParam;
-
 	struct Net : torch::nn::Module {
+
+        HyperParammter hParam;
 
 		Net() {
 			fc1 = register_module("fc1", torch::nn::Linear(hParam.NUM_STATES, 50));

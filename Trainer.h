@@ -42,7 +42,7 @@ public:
 
 public:
 	int episodes = 0;
-	std::unordered_map<RL_ALGO::_KIND, RLAlgo::RL_Base> algoMap;
+//	std::unordered_map<RL_ALGO::_KIND, RLAlgo::RL_Base> algoMap;
 
 };
 
