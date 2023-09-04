@@ -31,6 +31,7 @@
 
 #define SERVERPORT 9000
 #define BUFSIZE 1024
+#define MESSAGE_SIZE 2048
 
 // Lib Torch
 #include<torch/torch.h>

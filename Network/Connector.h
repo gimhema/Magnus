@@ -29,6 +29,13 @@ struct SOCKETINFO
 	WSABUF wsabuf;
 };
 
+struct AgentMessage
+{
+	int agentID;
+	int functionID;
+	char fuctionVal[MESSAGE_SIZE];
+};
+
 class MagnusConnector
 {
 public:
