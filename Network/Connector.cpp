@@ -97,6 +97,12 @@ DWORD WINAPI WorkerThread(LPVOID arg)
 	return 0;
 }
 
+void MagnusConnector::ConnectorInitialize()
+{
+
+}
+
+
 int MagnusConnector::ConnectorMain()
 {
 	int retval;
@@ -220,6 +226,7 @@ void MagnusConnector::PublishData()
 {
 
 }
+
 
 
 

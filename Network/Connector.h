@@ -32,8 +32,24 @@ struct SOCKETINFO
 struct AgentMessage
 {
 	int agentID;
-	int functionID;
-	char fuctionVal[MESSAGE_SIZE];
+	int fID;
+	char fParam[MESSAGE_SIZE];
+};
+
+class AgentFunction
+{
+public:
+	AgentFunction();
+	~AgentFunction();
+
+public:
+	char param[MESSAGE_SIZE];
+	// std function member . . . .
+public:
+	void SetParam(char _param[MESSAGE_SIZE]);
+	void SetFunction(); // set function member . . . .
+	void Execute();
+
 };
 
 class MagnusConnector
@@ -44,6 +60,12 @@ public:
 	~MagnusConnector();
 
 public:
+	std::unordered_map<ENV_MESSAGE::_KIND, AgentFunction> agentFunctionMap;
+
+
+public:
+
+	void ConnectorInitialize();
 
 	int ConnectorMain();
 
