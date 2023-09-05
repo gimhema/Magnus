@@ -11,12 +11,12 @@ AgentFunction::~AgentFunction()
 
 }
 
-void AgentFunction::SetParam(char _param[MESSAGE_SIZE])
+void AgentFunction::SetParam(std::string _param)
 {
-
+	param = _param;
 }
 
-void AgentFunction::SetFunction(std::function<void(char*)> _func)
+void AgentFunction::SetFunction(std::function<void(std::string)> _func)
 {
 	Function = _func;
 }

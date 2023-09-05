@@ -43,12 +43,12 @@ public:
 	~AgentFunction();
 
 public:
-	char param[MESSAGE_SIZE];
-	std::function<void(char*)> Function; // std function member . . . .
+	std::string param;
+	std::function<void(std::string)> Function; // std function member . . . .
 	
 public:
-	void SetParam(char _param[MESSAGE_SIZE]);
-	void SetFunction(std::function<void(char*)> _func); // set function member . . . .
+	void SetParam(std::string _param);
+	void SetFunction(std::function<void(std::string)> _func); // set function member . . . .
 	void Execute();
 
 };
