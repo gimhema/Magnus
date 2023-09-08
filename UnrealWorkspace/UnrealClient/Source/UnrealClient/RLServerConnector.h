@@ -4,6 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Sockets.h"
+#include "SocketSubsystem.h"
+#include "SocketSubsystemModule.h"
+#include "IPAddress.h"
 #include "RLServerConnector.generated.h"
 
 UCLASS()
@@ -23,4 +27,24 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+public:
+
+	UPROPERTY(BlueprintReadWrite)
+	FString RLServerIP = TEXT("");
+	UPROPERTY(BlueprintReadWrite)
+	int32 RLServerPort = 0;
+
+	FSocketSubsystemModule& SocketSubsystem = FModuleManager::LoadModuleChecked<FSocketSubsystemModule>("SocketSubsystem");
+	ISocketSubsystem* SocketSubsystemPtr;
+	FSocket* Socket;
+
+public:
+	UFUNCTION()
+	void InitSocketSystem();
+
+	UFUNCTION()
+	void CreateSocket();
+
+	UFUNCTION()
+	bool SendMessageToRLServer(const FString& Message);
 };
