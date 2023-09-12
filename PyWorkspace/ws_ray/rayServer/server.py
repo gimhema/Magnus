@@ -7,6 +7,8 @@ ray.init()
 server_ip = "127.0.0.1"
 server_port = 9999
 
+
+@ray.remote
 class Server:
     def __init__(self) -> None:
         pass
@@ -14,7 +16,6 @@ class Server:
     def setup(self):
         pass
 
-    @ray.remote
     def run(self):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
             server_socket.bind((server_ip, server_port))
