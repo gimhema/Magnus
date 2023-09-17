@@ -1,5 +1,6 @@
 import ray
 import socket
+import queue
 
 ray.init()
 
@@ -10,6 +11,9 @@ server_port = 9999
 class Server:
     def __init__(self) -> None:
         self.server_sock = None
+        self.message_queue = queue.Queue()
+        self.terminated = False
+        self.echoTest = True # For test, when train agent change False
         pass
 
     def setup(self):
@@ -32,8 +36,11 @@ class Server:
         pass
 
     def recvMessageFromUnreal(self, data):
-        print(f"Recv data : : {data.decode('utf-8')}")
         # 언리얼에서 수신받은 데이터들을 Env Status에 업데이트해놓는다.
+        print(f"Recv data : : {data.decode('utf-8')}")
+
+        if self.echoTest is True:
+            self.message_queue(data)
         pass
 
     def sendMessageToUnreal(self, message):
@@ -47,9 +54,14 @@ class Server:
         pass
 
     def sendLoop(self):
-        # Unreal Env 학습을 시작한다.
-        # observation은 수신루프에서 업데이트해주는 Env Status에서 받아온다
-        # 액션을 보낼때마다 sendMessageToUnreal 함수를 호출하여 보내준다.
+        # Unreal Env 에서 push한 메세지큐들을 쭉 돌면서 메세지를 전송한다.
+        self.setup()
+        while True:
+            if self.terminated is True:
+                break
+            if self.message_queue.empty() is False:
+                _sendMsg = self.message_queue.get()
+                self.sendMessageToUnreal(_sendMsg)
         pass
 
 rayServer = Server.remote()
