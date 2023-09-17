@@ -13,6 +13,7 @@ class Server:
         self.server_sock = None
         self.message_queue = queue.Queue()
         self.terminated = False
+        self.conn = None
         self.echoTest = True # For test, when train agent change False
         pass
 
@@ -26,13 +27,14 @@ class Server:
     def recvWait(self):
         self.setup()
         while True:
-            conn, addr = self.server_sock.accept()
-            with conn:
+            self.conn, addr = self.server_sock.accept()
+            with self.conn:
                 print(f"Connected . . : {addr}")
-                data = conn.recv(1024)
-                if not data:
-                    break
-                self.recvMessageFromUnreal(data)
+                while True:  # 연결을 종료하지 않고 계속 통신
+                    data = self.conn.recv(1024)
+                    if not data:
+                        break
+                    self.recvMessageFromUnreal(data)
         pass
 
     def recvMessageFromUnreal(self, data):
@@ -40,14 +42,17 @@ class Server:
         print(f"Recv data : : {data.decode('utf-8')}")
 
         if self.echoTest is True:
-            self.message_queue(data)
+            print(f"Push Message : {data}")
+            self.message_queue.put(data)
+            print(f"Push Message Completed")
         pass
 
     def sendMessageToUnreal(self, message):
-        self.setup()
+        print("Send Message To Client Step")
         try:
+            print(f"Make Message : {message}" )
             message_bytes = message.encode('utf-8')
-            self.server_sock.sendall(message_bytes)
+            self.conn.sendall(message_bytes)
             print(f"Sent message to Unreal Engine: {message}")
         except Exception as e:
             print(f"Error sending message to Unreal Engine: {str(e)}")
@@ -55,6 +60,7 @@ class Server:
 
     def sendLoop(self):
         # Unreal Env 에서 push한 메세지큐들을 쭉 돌면서 메세지를 전송한다.
+        print("Send Loop Start . . .")
         self.setup()
         while True:
             if self.terminated is True:
@@ -68,5 +74,10 @@ rayServer = Server.remote()
 
 rayServer.recvWait.remote()
 rayServer.sendLoop.remote()
+
+loop = True
+while True:
+    if loop is False:
+        break
 
 print("TEST ! ! !")
