@@ -14,7 +14,10 @@ class Server:
         self.server_sock = None
         self.message_queue = queue.Queue()
         self.terminated = False
+        
         self.conn = None
+        self.client_conns = {}
+
         self.echoTest = True # For test, when train agent change False
         pass
 
@@ -38,26 +41,15 @@ class Server:
                     self.recvMessageFromUnreal(data)
         pass
 
-    def recvMessageFromUnreal(self, data):
-        # 언리얼에서 수신받은 데이터들을 Env Status에 업데이트해놓는다.
-        print(f"Recv data : : {data.decode('utf-8')}")
-
-        if self.echoTest is True:
-            print(f"Push Message : {data}")
-            self.message_queue.put(data)
-            print(f"Push Message Completed")
-        pass
-
     def sendMessageToUnreal(self, message):
         print("Send Message To Client Step")
         try:
-            print(f"Make Message : {message}" )
-            message_bytes = message.encode('utf-8')
-            self.conn.sendall(message_bytes)
-            print(f"Sent message to Unreal Engine: {message}")
+            print(f"Make Message : {message}")
+            for client_id, conn in self.client_conns.items():
+                conn.sendall(message)  # 모든 클라이언트에게 메시지 전송
+                print(f"Sent message to {client_id}: {message}")
         except Exception as e:
             print(f"Error sending message to Unreal Engine: {str(e)}")
-        pass
 
     def acceptClients(self):
         self.setup()
@@ -70,29 +62,32 @@ class Server:
     def handleClient(self, conn, addr):
         with conn:
             print(f"Connected: {addr}")
+            client_id = f"{addr[0]}:{addr[1]}"  # 클라이언트를 구분할 수 있는 고유한 ID 생성
+            self.client_conns[client_id] = conn  # 각 클라이언트에 대한 연결을 저장
+
             while True:
                 data = conn.recv(1024)
                 if not data:
                     break
-                self.recvMessageFromUnreal(data)
+                self.recvMessageFromUnreal(data, client_id)
+                if self.message_queue.empty() is False:
+                    _sendMsg = self.message_queue.get()
+                    self.sendMessageToUnreal(_sendMsg)
         pass
+        
+    def recvMessageFromUnreal(self, data, client_id):
+        # 언리얼에서 수신받은 데이터들을 Env Status에 업데이트해놓는다.
+        print(f"Recv data from {client_id}: {data.decode('utf-8')}")
 
-    def sendLoop(self):
-        # Unreal Env 에서 push한 메세지큐들을 쭉 돌면서 메세지를 전송한다.
-        print("Send Loop Start . . .")
-        self.setup()
-        while True:
-            if self.terminated is True:
-                break
-            if self.message_queue.empty() is False:
-                _sendMsg = self.message_queue.get()
-                self.sendMessageToUnreal(_sendMsg)
+        if self.echoTest is True:
+            print(f"Push Message : {data}")
+            self.message_queue.put(data)
+            print(f"Push Message Completed")
         pass
 
 rayServer = Server.remote()
 
 # rayServer.recvWait.remote()
-# rayServer.sendLoop.remote()
 rayServer.acceptClients.remote()
 
 loop = True
