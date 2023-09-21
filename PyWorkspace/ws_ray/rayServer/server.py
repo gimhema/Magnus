@@ -1,6 +1,7 @@
 import ray
 import socket
 import queue
+import threading
 
 ray.init()
 
@@ -58,6 +59,24 @@ class Server:
             print(f"Error sending message to Unreal Engine: {str(e)}")
         pass
 
+    def acceptClients(self):
+        self.setup()
+        while True:
+            conn, addr = self.server_sock.accept()
+            client_thread = threading.Thread(target=self.handleClient, args=(conn, addr))
+            client_thread.start()
+        pass
+
+    def handleClient(self, conn, addr):
+        with conn:
+            print(f"Connected: {addr}")
+            while True:
+                data = conn.recv(1024)
+                if not data:
+                    break
+                self.recvMessageFromUnreal(data)
+        pass
+
     def sendLoop(self):
         # Unreal Env 에서 push한 메세지큐들을 쭉 돌면서 메세지를 전송한다.
         print("Send Loop Start . . .")
@@ -72,8 +91,9 @@ class Server:
 
 rayServer = Server.remote()
 
-rayServer.recvWait.remote()
-rayServer.sendLoop.remote()
+# rayServer.recvWait.remote()
+# rayServer.sendLoop.remote()
+rayServer.acceptClients.remote()
 
 loop = True
 while True:
