@@ -5,12 +5,13 @@ import threading
 
 ray.init()
 
-server_ip = "127.0.0.1"
-server_port = 9999
 
 @ray.remote
 class Server:
     def __init__(self) -> None:
+        self.server_ip = "127.0.0.1"
+        self.server_port = 9999
+
         self.server_sock = None
         self.message_queue = queue.Queue()
         self.terminated = False
@@ -18,13 +19,14 @@ class Server:
         self.conn = None
         self.client_conns = {}
 
-        self.echoTest = True # For test, when train agent change False
+        self.echoTest = False # For test, when train agent change False
+
         pass
 
     def setup(self):
         if self.server_sock is None:
             self.server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self.server_sock.bind((server_ip, server_port))
+            self.server_sock.bind((self.server_ip, self.server_port))
             self.server_sock.listen()
         pass
 
@@ -86,8 +88,6 @@ class Server:
         pass
 
 rayServer = Server.remote()
-
-# rayServer.recvWait.remote()
 rayServer.acceptClients.remote()
 
 loop = True
