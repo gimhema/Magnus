@@ -12,12 +12,33 @@ gTrainServer = Server.remote()
 gTrainServer.acceptClients.remote()
 print("Setup Server")
 
+class EnvConfig():
+    def __init__(self) -> None:
+        self.config_info_action = None # Action Space
+        self.config_info_observation = None # Observation Space
+        self.config_info_init_state = None # Init Status when use reset()
+
+        pass
+    def LoadEnvConfigFile(self):
+        # load config file (.json)
+
+        # set action, observation . . . .
+        pass
+
+
 class UnrealEnv(gym.Env):
     def __init__(self, env_config):
-        self.action_space = # <gym.Space>
-        self.observation_space = # <gym.Space>
+        # Load Config Info
+        self.env_config = EnvConfig()
+        self.env_config.LoadEnvConfigFile()
+
+        self.action_space = self.env_config.config_info_action
+        self.observation_space = self.env_config.config_info_observation
+        self.init_status = self.env_config.config_info_init_state
+
     def reset(self, seed, options):
-        return # <obs>, <info>
+        return self.init_status, {}
+        
     def step(self, action):
         # get current state
 
