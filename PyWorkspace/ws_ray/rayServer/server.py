@@ -13,7 +13,6 @@ class Server:
         self.server_port = 9999
 
         self.server_sock = None
-        self.message_queue = queue.Queue()
         self.terminated = False
         
         self.conn = None
@@ -21,6 +20,8 @@ class Server:
 
         self.echoTest = False # For test, when train agent change False
 
+        self.message_queue = queue.Queue() # send buffer
+        self.recv_recent_msg = None # current state
         pass
 
     def setup(self):
@@ -81,11 +82,28 @@ class Server:
         # 언리얼에서 수신받은 데이터들을 Env Status에 업데이트해놓는다.
         print(f"Recv data from {client_id}: {data.decode('utf-8')}")
 
+        self.recv_recent_msg = data.decode('utf-8')
+
         if self.echoTest is True:
             print(f"Push Message : {data}")
             self.message_queue.put(data)
             print(f"Push Message Completed")
         pass
+
+    def PushStateToContainer(self, state):
+        msg = ""
+
+        # convert state to msg . . .
+        
+        self.message_queue.put(msg)
+        pass
+
+    def GetRecentState(self):
+        captured = self.recv_recent_msg
+
+        # convert msg to state container
+
+        return self.recv_recent_msg
 
 rayServer = Server.remote()
 rayServer.acceptClients.remote()
