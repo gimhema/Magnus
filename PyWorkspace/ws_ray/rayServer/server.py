@@ -101,9 +101,14 @@ class Server:
     def GetRecentState(self):
         captured = self.recv_recent_msg
 
-        # convert msg to state container
+        # convert msg to state container & reward & done
 
-        return self.recv_recent_msg
+        current_state = {}
+        reward = 0
+        done = False
+
+        # return state & reward
+        return current_state, reward, done
 
 rayServer = Server.remote()
 rayServer.acceptClients.remote()
