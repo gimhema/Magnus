@@ -2,6 +2,7 @@ from server import Server
 import gymnasium as gym
 import ray
 from ray.rllib.algorithms import ppo, dqn, sac
+import time
 
 print("IMPORT COMPLETED")
 
@@ -17,6 +18,7 @@ class EnvConfig():
         self.config_info_action = None # Action Space
         self.config_info_observation = None # Observation Space
         self.config_info_init_state = None # Init Status when use reset()
+        self.config_info_wait_delay = None # Wait Delay
 
         pass
     def LoadEnvConfigFile(self):
@@ -35,23 +37,24 @@ class UnrealEnv(gym.Env):
         self.action_space = self.env_config.config_info_action
         self.observation_space = self.env_config.config_info_observation
         self.init_status = self.env_config.config_info_init_state
+        self.wait_delay = self.env_config.config_info_wait_delay
+
 
     def reset(self, seed, options):
         return self.init_status, {}
-        
+
     def step(self, action):
-        # get current state
-
-        # pop from trainServer recvBuffer
-
-        # calc action value 
-        
+        # calc action value
         # push to trainServer sendBuffer
+        gTrainServer.PushStateToContainer(action).remote()
+
+        # delay
+        time.sleep(self.wait_delay)
 
         # get next state and reward from trainServer recvBuffer
+        next_state, reward, done = gTrainServer.GetRecentState().remote()
 
-        # loop . . . .
-        return # <obs>, <reward: float>, <terminated: bool>, <truncated: bool>, <info: dict>
+        return ([next_state], reward, done, done, {})
 
 class RayTrainer:
     def __init__(self) -> None:
