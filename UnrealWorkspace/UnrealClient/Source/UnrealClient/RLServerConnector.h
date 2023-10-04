@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Sockets.h"
 #include "SocketSubsystem.h"
-#include "SocketSubsystemModule.h"
+// #include "SocketSubsystemModule.h"
 #include "IPAddress.h"
 #include "RLServerConnector.generated.h"
 
@@ -34,7 +34,7 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	int32 RLServerPort = 0;
 
-	FSocketSubsystemModule& SocketSubsystem = FModuleManager::LoadModuleChecked<FSocketSubsystemModule>("SocketSubsystem");
+//	FSocketSubsystemModule& SocketSubsystem = FModuleManager::LoadModuleChecked<FSocketSubsystemModule>("SocketSubsystem");
 	ISocketSubsystem* SocketSubsystemPtr;
 	FSocket* Socket;
 
