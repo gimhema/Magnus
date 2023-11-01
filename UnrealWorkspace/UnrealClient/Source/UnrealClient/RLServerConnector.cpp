@@ -69,6 +69,8 @@ void ARLServerConnector::CreateSocket()
                 {
                     UE_LOG(LogTemp, Error, TEXT("Failed Send Message"));
                 }
+
+                isRun = true;
             }
             else
             {
@@ -86,6 +88,59 @@ void ARLServerConnector::CreateSocket()
     }
 }
 
+void ARLServerConnector::Start()
+{
+    CreateSocket();
+
+    // Listen . . . 
+
+    while (isRun)
+    {
+        uint32 pendingDataSize = 0;
+        TArray<uint8> recvedData;
+
+        int32 totalReadData = 0;
+
+        Socket->SetNonBlocking(true);
+        int32 _read;
+        uint8 _temp;
+        if (!Socket->Recv(&_temp, 1, _read, ESocketReceiveFlags::Peek))
+        {
+            isRun = false;
+            continue;
+        }
+
+        Socket->SetNonBlocking(false);
+
+        while (isRun)
+        {
+            if (!Socket->HasPendingData(pendingDataSize))
+            {
+                break;
+            }
+
+            recvedData.SetNumUninitialized(totalReadData + pendingDataSize);
+
+            int32 readData = 0;
+
+            if (!Socket->Recv(recvedData.GetData() + totalReadData, pendingDataSize, readData))
+            {
+                // Data Read Failed.
+                break;
+            }
+            totalReadData = totalReadData + readData;
+        }
+
+        if (isRun && recvedData.Num() != 0)
+        {
+            // Recv Logic
+            RecvMessageFromServer(recvedData);
+        }
+
+        // sleep for loop control . . .
+    }
+}
+
 bool ARLServerConnector::SendMessageToRLServer(const FString& Message)
 {
     // 메세지 전송
@@ -94,5 +149,15 @@ bool ARLServerConnector::SendMessageToRLServer(const FString& Message)
     return Socket->Send((uint8*)TCHAR_TO_UTF8(*Message), Message.Len(), BytesSent);
 }
 
+void ARLServerConnector::RecvMessageFromServer(TArray<uint8>& Message)
+{
+    // Recv Logic . . .
 
+    //    if (arenaGameMode)
+    //    {
+    //        FString _data = ReadDataAsString(Message, Message.Num());
+    //        //        arenaGameMode->CallMessageFunctionByName();
+    //        //        arenaGameMode->CallMessageFunctionByUnique();
+    //    }
+}
 

@@ -34,6 +34,8 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	int32 RLServerPort = 0;
 
+	bool isRun = false;
+
 //	FSocketSubsystemModule& SocketSubsystem = FModuleManager::LoadModuleChecked<FSocketSubsystemModule>("SocketSubsystem");
 	ISocketSubsystem* SocketSubsystemPtr;
 	FSocket* Socket;
@@ -46,5 +48,12 @@ public:
 	void CreateSocket();
 
 	UFUNCTION()
+	void Start();
+
+	UFUNCTION()
 	bool SendMessageToRLServer(const FString& Message);
+
+	UFUNCTION()
+	void RecvMessageFromServer(TArray<uint8>& Message);
+
 };
